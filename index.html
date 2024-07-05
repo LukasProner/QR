@@ -10,7 +10,51 @@
 <video id="video" width="300" height="200" style="border: 1px solid black;"></video>
 <canvas id="canvas" width="300" height="200" style="display: none;"></canvas>
 <p id="output">Scan a QR code</p>
+
+<!-- Include jsQR library -->
 <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
-<script src="scanner.js"></script>
+
+<!-- Inline JavaScript -->
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const output = document.getElementById('output');
+    const canvasContext = canvas.getContext('2d');
+
+    console.log('Starting QR code scanner...');
+
+    // Access the camera and stream video
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(stream => {
+            console.log('Camera accessed successfully');
+            video.srcObject = stream;
+            video.setAttribute('playsinline', true); // Required for iOS to play video in <video> element
+            video.play();
+            requestAnimationFrame(tick);
+        })
+        .catch(err => {
+            console.error('Error accessing the camera', err);
+            output.textContent = 'Error accessing the camera';
+        });
+
+    function tick() {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+            console.log('Processing video frame');
+            canvasContext.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvasContext.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: 'dontInvert',
+            });
+            if (code) {
+                console.log(`QR Code Data: ${code.data}`);
+                output.textContent = `QR Code Data: ${code.data}`;
+            } else {
+                console.log('Scanning...');
+                output.textContent = 'Scanning...';
+            }
+        }
+        requestAnimationFrame(tick);
+    }
+</script>
 </body>
 </html>
