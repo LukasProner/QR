@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Náhodné Generovanie Čísel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 40px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 40px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Náhodné Generovanie Čísel</h1>
+
+    <button onclick="generateRandomNumber()">Generovať</button>
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+    function generateRandomNumber() {
+        var min = 0//parseInt(document.getElementById('min').value);
+        var max = 999//parseInt(document.getElementById('max').value);
+        var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        document.getElementById('result').textContent = randomNumber;
+    }
+</script>
+</body>
+</html>
